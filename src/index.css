@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+:root,
+[data-palette="esmeralda"] {
+  --bg-canvas: #f4f7f6;
+  --sidebar-from: #0c2924;
+  --sidebar-via: #09201c;
+  --sidebar-to: #061513;
+  --brand-primary: #0d9488;
+  --brand-primary-hover: #0f766e;
+  --brand-heading: #0c2924;
+  --brand-accent-light: #5eead4;
+  --brand-soft-bg: #eef8f6;
+  --brand-soft-border: #bce6df;
+  --hero-from: #d5f2ec;
+  --hero-via: #e8f8f5;
+  --hero-to: #eef7e8;
+}
+
+[data-palette="indigo"] {
+  --bg-canvas: #f5f6fb;
+  --sidebar-from: #1a1b3a;
+  --sidebar-via: #14152e;
+  --sidebar-to: #0d0e21;
+  --brand-primary: #4f46e5;
+  --brand-primary-hover: #4338ca;
+  --brand-heading: #1a1b3a;
+  --brand-accent-light: #a5b4fc;
+  --brand-soft-bg: #eef2ff;
+  --brand-soft-border: #c7d2fe;
+  --hero-from: #e0e7ff;
+  --hero-via: #ede9fe;
+  --hero-to: #e0f2fe;
+}
+
+[data-palette="grafito"] {
+  --bg-canvas: #f6f6f4;
+  --sidebar-from: #1c2127;
+  --sidebar-via: #15191e;
+  --sidebar-to: #0f1216;
+  --brand-primary: #0284c7;
+  --brand-primary-hover: #0369a1;
+  --brand-heading: #181c20;
+  --brand-accent-light: #7dd3fc;
+  --brand-soft-bg: #f0f7fa;
+  --brand-soft-border: #bae6fd;
+  --hero-from: #e2e8f0;
+  --hero-via: #f1f5f9;
+  --hero-to: #e0f2fe;
+}
+
+@layer base {
+  body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-canvas);
+    color: #0f172a;
+  }
+}
+
+.font-script {
+  font-family: 'Caveat', cursive;
+}
+
+.font-mono-clinical {
+  font-family: 'JetBrains Mono', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Custom subtle scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.35);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.55);
+}
+
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only-container {
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+

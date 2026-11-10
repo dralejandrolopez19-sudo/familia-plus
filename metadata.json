@@ -1,0 +1,6 @@
+{
+  "name": "Familia+ Medicina Familiar",
+  "description": "Plataforma clínica integral para medicina familiar, gestión de pacientes, consultas, recetas médicas, vacunación y control de crecimiento infantil conforme a la Ley 42-01.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

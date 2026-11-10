@@ -1,0 +1,20 @@
+{
+  "id": "/",
+  "name": "Familia+ — Sistema Integral de Medicina Familiar y Comunitaria",
+  "short_name": "Familia+",
+  "description": "Plataforma clínica integral para medicina familiar, 8 fichas MSP, consulta a domicilio, familiograma, certificados Ley 42-01, facturación ARS y calculadoras clínicas.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#064e3b",
+  "theme_color": "#0f766e",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

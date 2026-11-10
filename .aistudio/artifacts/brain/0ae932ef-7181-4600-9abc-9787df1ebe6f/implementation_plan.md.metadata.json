@@ -1,0 +1,6 @@
+{
+  "summary":  "Plan de auditoría técnica, corrección de persistencia v3 en las 8 Fichas MSP, endurecimiento de reglas Firestore para perfiles médicos y sincronización en la nube de visitas domiciliarias y maletín UNAP, manteniendo el sistema en blanco listo para uso clínico real.",
+  "updatedAt":  "2026-11-08T20:02:32.940753321Z",
+  "requestFeedback":  true,
+  "userFacing":  true
+}

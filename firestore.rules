@@ -1,0 +1,187 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: clinicalRecords
+    // Document ID: {patientId}
+    // Fields:
+    //   - patientId: string (required, 1..80 chars)
+    //   - patientName: string (required, 1..160 chars)
+    //   - updatedAt: string (required, 1..60 chars)
+    //   - updatedBy: string (required, 1..160 chars)
+    //   - payloadJson: string (required, 2..600000 chars)
+    //
+    // Collection: doctors
+    // Document ID: {doctorId}
+    // Fields:
+    //   - id: string (required, 1..128 chars)
+    //   - name: string (required, 1..140 chars)
+    //   - email: string (required, 1..140 chars)
+    //   - exequatur: string (required, 1..40 chars)
+    //   - cmd: string (required, 1..40 chars)
+    //   - specialty: string (required, 1..120 chars)
+    //   - consultorio: string (required, 1..80 chars)
+    //   - unapCenter: string (required, 1..160 chars)
+    //   - shift: string (required, 1..80 chars)
+    //   - updatedAt: string (required, 1..60 chars)
+    //
+    // Collection: homeVisits
+    // Document ID: {visitId}
+    // Fields:
+    //   - id: string (required, 1..100 chars)
+    //   - patientId: string (required, 1..80 chars)
+    //   - patientName: string (required, 1..160 chars)
+    //   - sectorBarrio: string (required, 1..160 chars)
+    //   - estadoVisita: string (required, 1..60 chars)
+    //   - updatedAt: string (required, 1..60 chars)
+    //   - updatedBy: string (required, 1..160 chars)
+    //   - payloadJson: string (required, 2..400000 chars)
+    //
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAuthorizedMedicalStaff() {
+      return isAuthenticated() && request.auth.uid != null;
+    }
+
+    function isValidClinicalRecord(data, patientId) {
+      return data.keys().hasAll(['patientId', 'patientName', 'updatedAt', 'updatedBy', 'payloadJson']) &&
+        data.keys().hasOnly(['patientId', 'patientName', 'updatedAt', 'updatedBy', 'payloadJson']) &&
+        data.patientId is string &&
+        data.patientId == patientId &&
+        data.patientId.size() >= 1 &&
+        data.patientId.size() <= 80 &&
+        data.patientName is string &&
+        data.patientName.size() >= 1 &&
+        data.patientName.size() <= 160 &&
+        data.updatedAt is string &&
+        data.updatedAt.size() >= 1 &&
+        data.updatedAt.size() <= 60 &&
+        data.updatedBy is string &&
+        data.updatedBy.size() >= 1 &&
+        data.updatedBy.size() <= 160 &&
+        data.payloadJson is string &&
+        data.payloadJson.size() >= 2 &&
+        data.payloadJson.size() <= 600000;
+    }
+
+    function isValidDoctorProfile(data, doctorId) {
+      return data.keys().hasAll(['id', 'name', 'exequatur', 'cmd', 'specialty', 'consultorio', 'unapCenter', 'shift', 'updatedAt']) &&
+        data.keys().hasOnly(['id', 'name', 'initials', 'email', 'photoURL', 'exequatur', 'cmd', 'specialty', 'consultorio', 'unapCenter', 'shift', 'avatarBg', 'updatedAt']) &&
+        data.id is string &&
+        data.id == doctorId &&
+        data.id.size() >= 1 &&
+        data.id.size() <= 128 &&
+        data.name is string &&
+        data.name.size() >= 1 &&
+        data.name.size() <= 140 &&
+        (!('initials' in data) || (data.initials is string && data.initials.size() <= 10)) &&
+        (!('email' in data) || (data.email is string && data.email.size() <= 140)) &&
+        (!('photoURL' in data) || (data.photoURL is string && data.photoURL.size() <= 500)) &&
+        (!('avatarBg' in data) || (data.avatarBg is string && data.avatarBg.size() <= 30)) &&
+        data.exequatur is string &&
+        data.exequatur.size() >= 1 &&
+        data.exequatur.size() <= 40 &&
+        data.cmd is string &&
+        data.cmd.size() >= 1 &&
+        data.cmd.size() <= 40 &&
+        data.specialty is string &&
+        data.specialty.size() >= 1 &&
+        data.specialty.size() <= 120 &&
+        data.consultorio is string &&
+        data.consultorio.size() >= 1 &&
+        data.consultorio.size() <= 80 &&
+        data.unapCenter is string &&
+        data.unapCenter.size() >= 1 &&
+        data.unapCenter.size() <= 160 &&
+        data.shift is string &&
+        data.shift.size() >= 1 &&
+        data.shift.size() <= 80 &&
+        data.updatedAt is string &&
+        data.updatedAt.size() >= 1 &&
+        data.updatedAt.size() <= 60;
+    }
+
+    function isValidHomeVisit(data, visitId) {
+      return data.keys().hasAll(['id', 'patientId', 'patientName', 'sectorBarrio', 'estadoVisita', 'updatedAt', 'updatedBy', 'payloadJson']) &&
+        data.keys().hasOnly(['id', 'patientId', 'patientName', 'sectorBarrio', 'estadoVisita', 'updatedAt', 'updatedBy', 'payloadJson']) &&
+        data.id is string &&
+        data.id == visitId &&
+        data.id.size() >= 1 &&
+        data.id.size() <= 100 &&
+        data.patientId is string &&
+        data.patientId.size() >= 1 &&
+        data.patientId.size() <= 80 &&
+        data.patientName is string &&
+        data.patientName.size() >= 1 &&
+        data.patientName.size() <= 160 &&
+        data.sectorBarrio is string &&
+        data.sectorBarrio.size() >= 1 &&
+        data.sectorBarrio.size() <= 160 &&
+        data.estadoVisita is string &&
+        data.estadoVisita.size() >= 1 &&
+        data.estadoVisita.size() <= 60 &&
+        data.updatedAt is string &&
+        data.updatedAt.size() >= 1 &&
+        data.updatedAt.size() <= 60 &&
+        data.updatedBy is string &&
+        data.updatedBy.size() >= 1 &&
+        data.updatedBy.size() <= 160 &&
+        data.payloadJson is string &&
+        data.payloadJson.size() >= 2 &&
+        data.payloadJson.size() <= 400000;
+    }
+
+    function isValidClinicSharedState(data, stateKey) {
+      return data.keys().hasAll(['stateKey', 'updatedAt', 'updatedBy', 'payloadJson']) &&
+        data.keys().hasOnly(['stateKey', 'updatedAt', 'updatedBy', 'payloadJson']) &&
+        data.stateKey is string &&
+        data.stateKey == stateKey &&
+        data.stateKey.size() >= 1 &&
+        data.stateKey.size() <= 80 &&
+        data.updatedAt is string &&
+        data.updatedAt.size() >= 1 &&
+        data.updatedAt.size() <= 60 &&
+        data.updatedBy is string &&
+        data.updatedBy.size() >= 1 &&
+        data.updatedBy.size() <= 160 &&
+        data.payloadJson is string &&
+        data.payloadJson.size() >= 2 &&
+        data.payloadJson.size() <= 800000;
+    }
+
+    match /clinicalRecords/{patientId} {
+      allow read: if isAuthorizedMedicalStaff();
+      allow create: if isAuthorizedMedicalStaff() && isValidClinicalRecord(request.resource.data, patientId);
+      allow update: if isAuthorizedMedicalStaff() && isValidClinicalRecord(request.resource.data, patientId);
+      allow delete: if isAuthorizedMedicalStaff();
+    }
+
+    match /doctors/{doctorId} {
+      allow read: if isAuthorizedMedicalStaff();
+      allow create: if isAuthorizedMedicalStaff() && isValidDoctorProfile(request.resource.data, doctorId);
+      allow update: if isAuthorizedMedicalStaff() && isValidDoctorProfile(request.resource.data, doctorId);
+      allow delete: if isAuthorizedMedicalStaff();
+    }
+
+    match /homeVisits/{visitId} {
+      allow read: if isAuthorizedMedicalStaff();
+      allow create: if isAuthorizedMedicalStaff() && isValidHomeVisit(request.resource.data, visitId);
+      allow update: if isAuthorizedMedicalStaff() && isValidHomeVisit(request.resource.data, visitId);
+      allow delete: if isAuthorizedMedicalStaff();
+    }
+
+    match /clinicState/{stateKey} {
+      allow read: if isAuthorizedMedicalStaff();
+      allow create: if isAuthorizedMedicalStaff() && isValidClinicSharedState(request.resource.data, stateKey);
+      allow update: if isAuthorizedMedicalStaff() && isValidClinicSharedState(request.resource.data, stateKey);
+      allow delete: if isAuthorizedMedicalStaff();
+    }
+  }
+}

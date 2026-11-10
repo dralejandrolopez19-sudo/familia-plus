@@ -1,0 +1,182 @@
+{
+  "entities": {
+    "PatientClinicalRecord": {
+      "title": "PatientClinicalRecord",
+      "description": "Expediente integral de fichas clínicas por paciente para medicina familiar en República Dominicana (8 formularios clínicos estandarizados incluyendo Visita Domiciliaria e historial de consultas).",
+      "type": "object",
+      "properties": {
+        "patientId": {
+          "type": "string",
+          "description": "Identificador único del paciente al que pertenece el expediente."
+        },
+        "patientName": {
+          "type": "string",
+          "description": "Nombre completo del paciente."
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Marca de tiempo ISO de la última actualización automática."
+        },
+        "updatedBy": {
+          "type": "string",
+          "description": "Nombre, Exequátur o correo del médico familiar que realizó la actualización."
+        },
+        "payloadJson": {
+          "type": "string",
+          "description": "Estructura serializada JSON con los 8 formularios clínicos MSP (Historia clínica individual, Consulta médica, Ficha familiar, Seguimiento de crónicas, Prevención, Fichas especiales, Referencia/Contrarreferencia y Visita Domiciliaria)."
+        }
+      },
+      "required": ["patientId", "patientName", "updatedAt", "updatedBy", "payloadJson"]
+    },
+    "DoctorProfile": {
+      "title": "DoctorProfile",
+      "description": "Perfil profesional de cada médico familiar registrado en el centro de salud (UNAP / CPN).",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "UID de Firebase Auth o identificador único del médico."
+        },
+        "name": {
+          "type": "string",
+          "description": "Nombre completo con título del médico familiar."
+        },
+        "initials": {
+          "type": "string",
+          "description": "Iniciales del médico para el avatar."
+        },
+        "email": {
+          "type": "string",
+          "description": "Correo electrónico institucional o asociado."
+        },
+        "photoURL": {
+          "type": "string",
+          "description": "URL opcional de foto de perfil."
+        },
+        "exequatur": {
+          "type": "string",
+          "description": "Número de Exequátur otorgado por el Poder Ejecutivo (RD)."
+        },
+        "cmd": {
+          "type": "string",
+          "description": "Número de colegiatura en el Colegio Médico Dominicano (CMD)."
+        },
+        "specialty": {
+          "type": "string",
+          "description": "Especialidad o rol clínico en Medicina Familiar."
+        },
+        "consultorio": {
+          "type": "string",
+          "description": "Consultorio asignado dentro del centro."
+        },
+        "unapCenter": {
+          "type": "string",
+          "description": "Unidad de Atención Primaria (UNAP) o Centro de Primer Nivel."
+        },
+        "shift": {
+          "type": "string",
+          "description": "Turno de guardia o consulta."
+        },
+        "avatarBg": {
+          "type": "string",
+          "description": "Color hexadecimal del avatar."
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Fecha ISO de última actualización del perfil médico."
+        }
+      },
+      "required": ["id", "name", "exequatur", "cmd", "specialty", "consultorio", "unapCenter", "shift", "updatedAt"]
+    },
+    "HomeVisitDocument": {
+      "title": "HomeVisitDocument",
+      "description": "Registro de consulta a domicilio y visita en terreno UNAP/MSP sincronizado para ruta comunitaria.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Identificador único de la visita domiciliaria."
+        },
+        "patientId": {
+          "type": "string",
+          "description": "Identificador del paciente visitado."
+        },
+        "patientName": {
+          "type": "string",
+          "description": "Nombre completo del paciente."
+        },
+        "sectorBarrio": {
+          "type": "string",
+          "description": "Sector o barrio de la visita."
+        },
+        "estadoVisita": {
+          "type": "string",
+          "description": "Estado actual de la visita domiciliaria."
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Fecha ISO de última actualización."
+        },
+        "updatedBy": {
+          "type": "string",
+          "description": "Médico responsable de la visita."
+        },
+        "payloadJson": {
+          "type": "string",
+          "description": "Datos clínicos completos serializados de la visita domiciliaria (Barthel, UPP, Zarit, ambiente, vectores y procedimientos)."
+        }
+      },
+      "required": ["id", "patientId", "patientName", "sectorBarrio", "estadoVisita", "updatedAt", "updatedBy", "payloadJson"]
+    },
+    "ClinicSharedState": {
+      "title": "ClinicSharedState",
+      "description": "Sincronización en tiempo real del padrón de pacientes, agenda, pediatría, esquema PAI, reclamos ARS, certificados médico-legales y curvas de laboratorio entre todos los médicos de la UNAP.",
+      "type": "object",
+      "properties": {
+        "stateKey": {
+          "type": "string",
+          "description": "Clave de la colección compartida (ej. shared_unap_bundle)."
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Fecha ISO de la última actualización en la nube."
+        },
+        "updatedBy": {
+          "type": "string",
+          "description": "Médico familiar que realizó la sincronización."
+        },
+        "payloadJson": {
+          "type": "string",
+          "description": "JSON serializado con pacientes, citas, pediatría, vacunas, reclamos ARS, certificados y laboratorios evolutivos."
+        }
+      },
+      "required": ["stateKey", "updatedAt", "updatedBy", "payloadJson"]
+    }
+  },
+  "firestore": {
+    "/clinicalRecords/{patientId}": {
+      "schema": {
+        "$ref": "#/entities/PatientClinicalRecord"
+      },
+      "description": "Almacena las 8 fichas clínicas e historial de consultas organizados por paciente, accesible por el equipo de médicos familiares."
+    },
+    "/doctors/{doctorId}": {
+      "schema": {
+        "$ref": "#/entities/DoctorProfile"
+      },
+      "description": "Directorio y credenciales de los médicos familiares que utilizan la plataforma."
+    },
+    "/homeVisits/{visitId}": {
+      "schema": {
+        "$ref": "#/entities/HomeVisitDocument"
+      },
+      "description": "Ruta y actas de consultas a domicilio realizadas por los médicos familiares en terreno."
+    },
+    "/clinicState/{stateKey}": {
+      "schema": {
+        "$ref": "#/entities/ClinicSharedState"
+      },
+      "description": "Estado compartido en tiempo real del centro de medicina familiar (pacientes, citas, PAI, ARS, certificados y biomarcadores)."
+    }
+  }
+}
